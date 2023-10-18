@@ -6,7 +6,6 @@ import org.example.Services.UserService;
 import org.example.Utils.FreeMarkerEngine;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

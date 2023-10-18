@@ -2,6 +2,7 @@ package org.example.Servlets;
 
 import org.example.DAO.UserDAO;
 import org.example.Entities.User;
+import org.example.Services.CookieService;
 import org.example.Services.UserService;
 import org.example.Utils.FreeMarkerEngine;
 
@@ -14,6 +15,7 @@ import java.sql.Connection;
 import java.util.HashMap;
 
 public class LoginServlet extends HttpServlet {
+    private CookieService cs;
     private final Connection connection;
     private final FreeMarkerEngine freeMarkerEngine = new FreeMarkerEngine();
     private UserService userService;
@@ -35,13 +37,12 @@ public class LoginServlet extends HttpServlet {
 
         User user = new User(email, password);
 
-        userService.getLogin(user);
-        userService.getUserById(user);
+        int userId = userService.getLogin(user);
+        cs = new CookieService(req, resp);
+        cs.addCookie(userId);
 
-//        Cookie cookie = new Cookie("login", email);
-//        resp.addCookie(cookie);
-        if(userService.getLogin(user)==true){
-            resp.sendRedirect("/like");
+        if(userService.isChecker()==true){
+            resp.sendRedirect("/users");
         }else{
             resp.sendRedirect("/login");
         }

@@ -32,44 +32,8 @@ public class UserDAO {
         }
     }
 
-//    public void getById(int id){
-//        String sql = "select id, email, password from \"users\" where id = ? ";
-//        try {
-//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//            ResultSet resultSet = preparedStatement.executeQuery();
-//            preparedStatement.setInt(1, id);
-//            if(resultSet.next()){
-//                User user = new User();
-//                resultSet.getInt(user.getId());
-//                resultSet.getString(user.getEmail());
-//                resultSet.getString(user.getPassword());
-//            }
-//        }catch (SQLException e){
-//            e.printStackTrace();
-//        }
-//    }
-
-    public User getById(User user){
-        String sql = "select id, email, password from users where id = ?";
-        int id = 0;
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                  user = new User();
-                  resultSet.getInt(user.getId());
-                  resultSet.getString(user.getEmail());
-                  resultSet.getString(user.getPassword());
-            }
-
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return user;
-    }
-
-    public List<User> getAll(List<User> userList){
+    public List<User> getAll(){
+        List<User> userList = new ArrayList<>();
         String sql = "select * from \"users\"";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -90,29 +54,30 @@ public class UserDAO {
         return userList;
     }
 
-    public User getLogin(User user) {
-        User result = null;
-        String sql = "SELECT * FROM users WHERE email=? AND password=?";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, user.getEmail());
-            ps.setString(2, user.getPassword());
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                result = new User(rs.getInt("id")
-                        , rs.getString("email")
-                        , rs.getString("password")
-                        , rs.getString("name")
-                        , rs.getString("surname")
-                        , rs.getBoolean("gender")
-                        , rs.getString("imgURL"));
+    public User get(int id) {
+        User user = null;
+        String query = "select id, email, password, name, surname, gender, imgurl from \"users\" where id = ?";
+
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                user = new User();
+                resultSet.getInt("id");
+                resultSet.getString("email");
+                resultSet.getString("password");
+                resultSet.getString("name");
+                resultSet.getString("surname");
+                resultSet.getBoolean("gender");
+                resultSet.getString("imgUrl");
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
-        return result;
+        return user;
     }
 }
 
